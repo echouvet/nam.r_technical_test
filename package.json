@@ -1,0 +1,31 @@
+{
+  "name": "nam.r",
+  "version": "1.0.0",
+  "description": "Scrapping for a job?",
+  "main": "app.js",
+  "scripts": {
+    "test": "node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/echouvet/nam.r_technical_test.git"
+  },
+  "author": "Eloi Chouvet",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/echouvet/nam.r_technical_test/issues"
+  },
+  "homepage": "https://github.com/echouvet/nam.r_technical_test#readme",
+  "dependencies": {
+    "download-file": "^0.1.5",
+    "ejs": "^2.6.1",
+    "express": "^4.16.4",
+    "htmlspecialchars": "^1.0.5",
+    "http": "0.0.0",
+    "https": "^1.0.0",
+    "is-empty": "^1.2.0",
+    "mysql": "^2.16.0",
+    "node-fetch": "^2.3.0",
+    "path": "^0.12.7"
+  }
+}
