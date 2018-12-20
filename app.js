@@ -51,7 +51,7 @@ async function createdata(res)
 {
 	try {
 		await Promise.all([scrapper(3001), scrapper(3002), scrapper(3003), scrapper(3004), scrapper(3005)])
-		con.query('SELECT * FROM datatable', (err, response) => { if (err) throw err
+		con.query('SELECT * FROM datatable ORDER BY page', (err, response) => { if (err) throw err
 			res.render('index.ejs', {data: response})
 		})
 	} catch(err) {console.log(err) }
@@ -59,7 +59,7 @@ async function createdata(res)
 
 
 app.get('/', (req, res) => {
-	con.query('SELECT * FROM datatable', (err, response) => { if (err) throw err
+	con.query('SELECT * FROM datatable ORDER BY page', (err, response) => { if (err) throw err
 		if (empty(response))
 			createdata(res)
 		else
