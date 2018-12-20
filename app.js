@@ -1,12 +1,11 @@
 const 	express = require('express')
 const	http = require("http")
 const	path = require('path')
-const	fs = require('fs')
 const	fetch = require('node-fetch')
 const	mysql = require('mysql')
-const	empty = require('is-empty');
+const	empty = require('is-empty')
 const	eschtml = require('htmlspecialchars')
-const 	download = require('download');
+const 	download = require('download')
 
 const    app = express()
 const    server = http.createServer(app)
@@ -27,7 +26,7 @@ con.connect((err) => { if (err) throw err
 	id INT AUTO_INCREMENT PRIMARY KEY, \
 	page INT, \
 	title VARCHAR(255), \
-	latest VARCHAR(255))`;
+	latest VARCHAR(255))`
 	con.query(users, (err) => { if (err) throw err }) 
 })
 
@@ -37,28 +36,30 @@ async function scrapper(page)
 {
 	try {
 		let requete = "https://www.data.gouv.fr/api/1/datasets/?page=" + page + "&page_size=1"
-		let fetching = await fetch(requete);
-		let data = await fetching.json();
+		let fetching = await fetch(requete)
+		let data = await fetching.json()
 		let sql = 'INSERT INTO datatable (page, title, latest) VALUES (?, ?, ?)'
 
 		data.data[0].resources.forEach(el => {
-			download(el.latest, path.join(__dirname, 'datasets'), {filename: eschtml(el.title)})
+			download(el.latest, path.join(__dirname, 'datasets'), {filename: eschtml(el.title)}).catch(err => console.log(err) );
 			con.query(sql, [page, eschtml(el.title), eschtml(el.latest)], (err) => { if (err) throw err })
 		})
-	} catch(err) { throw err }
+	} catch(err) { console.log(err) }
 }
 
 async function createdata(res)
 {
-	await Promise.all([scrapper(3000), scrapper(3001), scrapper(3002), scrapper(3003), scrapper(3004), scrapper(3005)])
-	con.query('SELECT * FROM datatable', (err, response) => {
-		res.render('index.ejs', {data: response})
-	})
+	try {
+		await Promise.all([scrapper(3001), scrapper(3002), scrapper(3003), scrapper(3004), scrapper(3005)])
+		con.query('SELECT * FROM datatable', (err, response) => { if (err) throw err
+			res.render('index.ejs', {data: response})
+		})
+	} catch(err) {console.log(err) }
 }
 
 
 app.get('/', (req, res) => {
-	con.query('SELECT * FROM datatable', (err, response) => {
+	con.query('SELECT * FROM datatable', (err, response) => { if (err) throw err
 		if (empty(response))
 			createdata(res)
 		else
