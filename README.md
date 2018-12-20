@@ -7,9 +7,9 @@ Technologies you will need to run this code:
 - Mysql
 
 Tu run the program: 
-- run 'npm i'
-- change your mysql credentials in app.js
-- run node app.js at the root of this git repository
-- connect on any web browser at 'http://localhost:8080/' (I tested on Google Chrome)
+- run 'npm i' at the root of repository
+- change your mysql credentials in the app.js
+- run 'node app.js' again at the root of repository
+- connect on any web browser at 'http://localhost:8080/' (I've tested this on Google Chrome)
 
 Have fun downloading random data :)
