@@ -1,0 +1,38 @@
+<head> 
+	 <title>nam.R's Test</title>
+    <style>
+  		table {
+  		  border-collapse: collapse;
+  		}
+
+  		td, th {
+  		  border: 1px solid #999;
+  		  padding: 0.5rem;
+  		  text-align: left;
+  		}
+	</style> 
+</head>
+<body>
+	<table>
+    <thead>
+      <tr>
+        <th>Page</th>
+        <th>Title</th>
+        <th>Download Externally</th>
+        <th>Download_Internally Maybe_Preview</th>
+      </tr>
+    </thead>
+    <tbody>
+    	<% if (data) { 
+        data.forEach(el => { %>
+          <tr>
+            <td><%= el.page %></td>
+            <td><%= el.title %></td>
+            <td> <a href="<%= el.latest %>">Download </a></td>
+            <td> <a href="/datasets/<%= el.title %>">Download </a></td>
+          </tr>
+      <%  }) } else { %> <td>Error: No Data</td> <% } %>
+    </tbody>
+</table>
+</body>
+

@@ -1,13 +1,12 @@
 const 	express = require('express')
 const	http = require("http")
-const	https = require("https")
 const	path = require('path')
 const	fs = require('fs')
 const	fetch = require('node-fetch')
 const	mysql = require('mysql')
 const	empty = require('is-empty');
 const	eschtml = require('htmlspecialchars')
-const	download = require('download-file')
+const 	download = require('download');
 
 const    app = express()
 const    server = http.createServer(app)
@@ -43,13 +42,7 @@ async function scrapper(page)
 		let sql = 'INSERT INTO datatable (page, title, latest) VALUES (?, ?, ?)'
 
 		data.data[0].resources.forEach(el => {
-			var options = {
-			    directory: "./datasets/",
-			    filename: eschtml(el.title)
-			}
-			console.log(el.latest)
-			download(el.latest, options, (err) => { if (err) throw err 
-				console.log(err)})
+			download(el.latest, path.join(__dirname, 'datasets'), {filename: eschtml(el.title)})
 			con.query(sql, [page, eschtml(el.title), eschtml(el.latest)], (err) => { if (err) throw err })
 		})
 	} catch(err) { throw err }
@@ -57,18 +50,21 @@ async function scrapper(page)
 
 async function createdata(res)
 {
-	await Promise.all([scrapper(3001), scrapper(3002), scrapper(3003), scrapper(3004), scrapper(3005)])
+	await Promise.all([scrapper(3000), scrapper(3001), scrapper(3002), scrapper(3003), scrapper(3004), scrapper(3005)])
 	con.query('SELECT * FROM datatable', (err, response) => {
-		res.render('index.ejs', {response})
+		res.render('index.ejs', {data: response})
 	})
 }
 
 
-app.get('*', (req, res) => {
+app.get('/', (req, res) => {
 	con.query('SELECT * FROM datatable', (err, response) => {
 		if (empty(response))
 			createdata(res)
 		else
-			res.render('index.ejs', {response})
+			res.render('index.ejs', {data: response})
 	})
+})
+.get('*', (req, res) => {
+	res.redirect('/')
 })
