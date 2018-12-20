@@ -15,7 +15,7 @@ app.set('view engine', 'ejs')
 
 var con = mysql.createConnection({
     host: "localhost",
-    user: "root",
+    user: "root", // CHANGE CREDENTIALS HERE
     password: "root42"
 })
 con.connect((err) => { if (err) throw err
